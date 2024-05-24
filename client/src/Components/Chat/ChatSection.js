@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { IoMdArrowBack } from "react-icons/io";
 import {formatTimestamp, getTick} from './utils';
 import { ConversationContext } from '../../Contexts/ConversationContext';
@@ -8,6 +8,7 @@ function ChatArea({selectedChat, setSelectedChat}) {
   const conversation = conversations[selectedChat] ?? {};
   const user = users[selectedChat] ?? {};
   const [newMessage, setNewMessage] = useState('');
+  const chatContainerRef = useRef(null);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -22,6 +23,11 @@ function ChatArea({selectedChat, setSelectedChat}) {
   useEffect(() => {
     markConversationAsSeen(selectedChat);
   }, [selectedChat]);
+
+
+  useEffect(() => {
+    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+  }, [conversations]);
   console.log("conversations ", conversations);
   console.log("conversation ", conversation);
   console.log("pending ", conversation?.pending_messages);
@@ -29,7 +35,7 @@ function ChatArea({selectedChat, setSelectedChat}) {
   const messages = [...Object.values(conversation?.messages ?? {}), ...Object.values(conversation?.pending_messages ?? {})];
   console.log("messages ", messages);
   return (
-    <div className="flex-grow flex flex-col bg-white h-[100%]">
+    <div className="flex-grow flex flex-col bg-white h-[100%]" ref={chatContainerRef}>
       {/* Chat Header */}
       <div className="flex items-center mb-4 bg-gray-200 p-2">
         <IoMdArrowBack onClick={() => setSelectedChat(null)} className='mr-2 text-lg cursor-pointer' />
