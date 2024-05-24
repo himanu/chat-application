@@ -165,7 +165,7 @@ export const ConversationContxtProvider = ({children}) => {
     }, []);
 
     useEffect(() => {
-        const socket = io('http://localhost:3001/', {
+        const socket = io('https://chat-application-o7mr.onrender.com', {
           auth: {
             token: localStorage.getItem("token") || ""
           }
