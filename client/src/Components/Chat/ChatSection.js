@@ -22,11 +22,8 @@ function ChatArea({selectedChat, setSelectedChat}) {
   // mark conversations as read
   useEffect(() => {
     markConversationAsSeen(selectedChat);
-  }, [selectedChat]);
+  }, [conversation]);
 
-  const scrollToBottom = () => {
-    chatContainerRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   useEffect(() => {
     // scrollToBottom();
