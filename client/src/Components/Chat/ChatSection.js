@@ -24,9 +24,15 @@ function ChatArea({selectedChat, setSelectedChat}) {
     markConversationAsSeen(selectedChat);
   }, [selectedChat]);
 
+  const scrollToBottom = () => {
+    chatContainerRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
-    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    // scrollToBottom();
+    setTimeout(() => {
+			chatContainerRef.current?.scrollIntoView({ behavior: "smooth" });
+		}, 100);
   }, [conversations]);
   console.log("conversations ", conversations);
   console.log("conversation ", conversation);
@@ -35,7 +41,7 @@ function ChatArea({selectedChat, setSelectedChat}) {
   const messages = [...Object.values(conversation?.messages ?? {}), ...Object.values(conversation?.pending_messages ?? {})];
   console.log("messages ", messages);
   return (
-    <div className="flex-grow flex flex-col bg-white h-[100%]" ref={chatContainerRef}>
+    <div className="flex-grow flex flex-col bg-white h-[100%]">
       {/* Chat Header */}
       <div className="flex items-center mb-4 bg-gray-200 p-2">
         <IoMdArrowBack onClick={() => setSelectedChat(null)} className='mr-2 text-lg cursor-pointer' />
@@ -50,7 +56,7 @@ function ChatArea({selectedChat, setSelectedChat}) {
       {/* Message Area */}
       <div className="flex-grow overflow-y-auto p-2">
         {messages?.map((msg, index) => (
-          <div key={index} className={`flex ${msg.sended_by_you ? 'justify-end' : ''}`}>
+          <div key={index} {...index === (messages.length - 1) ? {ref: chatContainerRef} : {}} className={`flex ${msg.sended_by_you ? 'justify-end' : ''}`}>
             <div className={`bg-gray-200 rounded-lg p-2 m-1 max-w-xs ${msg.sended_by_you ? 'text-right' : ''}`}>
               <p className="text-sm"> {msg.text}</p>
               <p className="text-xs text-gray-500 flex justify-end gap-1">{formatTimestamp(msg.timestamp ?? "")} {" "} {msg.sended_by_you && getTick(msg?.status ?? '')} </p>
