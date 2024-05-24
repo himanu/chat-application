@@ -10,9 +10,11 @@ const socketHandler = (socket, io) => {
 
     // Listen for chat message
     socket.on("messageSent", async (msg) => {
+        console.log("new message sent ", msg);
         const pending_message_id = msg.pending_message_id;
         // save message to db
         const  { id, timestamp } = await saveMessage(msg);
+        console.log("message saved in db");
         // notify sender about save
         const {text, sender_id, recipient_id} = msg;
         socket.emit("messageSaved", {
@@ -39,6 +41,7 @@ const socketHandler = (socket, io) => {
     // listen for successful message delivery
     socket.on("messageDelivered", async (msg) => {
         // update message
+        console.log("message has been delivered to recipient ", msg);
         const {
             text,
             sender_id,
@@ -47,8 +50,11 @@ const socketHandler = (socket, io) => {
             id,
         } = msg;
         await updateMessageStatus(id, "delivered");
+        console.log("maked the message as delivered");
+        console.log("sender_socket" ,user_socker_mapper[sender_id]);
         if (user_socker_mapper[sender_id]) {
             // notify sender about msg delivery
+            console.log("notifying the sender about delivery");
             io.to(user_socker_mapper[sender_id]).emit("msgDelivered", {
                 recipient_id,
                 message_id: id,
@@ -61,7 +67,9 @@ const socketHandler = (socket, io) => {
 
     socket.on("markMessageAsSeen", async (msg) => {
         const { sender_id, recipient_id } = msg;
+        console.log("someone has seen their msgs", msg);
         const documentIds = await markMessageSeen(sender_id, recipient_id);
+        console.log("event sender socket id ", user_socker_mapper[sender_id]);
         io.to(user_socker_mapper[sender_id]).emit("messageSeen", {
             messageIds: documentIds,
             user_id: recipient_id

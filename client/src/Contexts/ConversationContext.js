@@ -165,7 +165,7 @@ export const ConversationContxtProvider = ({children}) => {
     }, []);
 
     useEffect(() => {
-        const socket = io('https://chat-application-o7mr.onrender.com/', {
+        const socket = io('http://localhost:3001/', {
           auth: {
             token: localStorage.getItem("token") || ""
           }
@@ -249,6 +249,7 @@ export const ConversationContxtProvider = ({children}) => {
 
         socket.on("messageSeen", async (data) => {
             const { messageIds, user_id } = data;
+            console.log("message seen");
             setConversations((old) => {
                 let newState = { ...old };
                 messageIds.forEach((message_id) => {

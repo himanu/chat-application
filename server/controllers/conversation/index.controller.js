@@ -11,8 +11,6 @@ const getConversationsController = async (req, res) => {
         ]}).select(['text', 'sender_id', 'recipient_id', 'status', 'timestamp']).exec();
         const response = {};
         messages.forEach((message) => {
-            console.log("message ", message);
-            console.log("curentusrrId ", currentUserId);
             const sended_by_you = currentUserId.equals(message.sender_id);
             let user_id = sended_by_you ? message.recipient_id : message.sender_id;
             response[user_id] = response[user_id] || {
