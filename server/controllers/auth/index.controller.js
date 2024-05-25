@@ -44,7 +44,8 @@ const signInController = async (req, res) => {
           token, 
           user: {
             email: user?.email,
-            name: user?.name
+            name: user?.name,
+            id: user?.id
           },
           message: "Successfully Logged In" });
     } catch (error) {

@@ -5,10 +5,13 @@ const getConversationsController = async (req, res) => {
     try{
         const currentUserId = req.user._id;
 
-        const messages = await Messages.find({$or: [
+        const filter = {$or: [
             {sender_id: currentUserId},
             {recipient_id: currentUserId}
-        ]}).select(['text', 'sender_id', 'recipient_id', 'status', 'timestamp']).exec();
+        ]}
+        const update = { $set: { status: "delivered"} };
+        const messages = await Messages.find(filter).select(['text', 'sender_id', 'recipient_id', 'status', 'timestamp']).exec();
+        await Messages.updateMany({recipient_id: currentUserId, status: 'sent'}, update)
         const response = {};
         messages.forEach((message) => {
             const sended_by_you = currentUserId.equals(message.sender_id);

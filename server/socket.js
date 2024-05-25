@@ -74,6 +74,10 @@ const socketHandler = (socket, io) => {
             messageIds: documentIds,
             user_id: recipient_id
         })
+        socket.emit("messageSeen", {
+            messageIds: documentIds,
+            user_id: sender_id
+        })
     })
     // Handle user disconnect
     socket.on("disconnect", () => {
