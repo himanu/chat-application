@@ -8,7 +8,6 @@ const verifyUser = require("./middlewares/auth");
 const { getUserController } = require("./controllers/user/index.controller");
 const { getConversationsController } = require("./controllers/conversation/index.controller");
 const socketHandler = require("./socket");
-const path = require("path");
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3001;
@@ -24,9 +23,7 @@ const io = new Server(server,{
   }
 });
 
-const root_directory = path.dirname("");
 app.use(express.json());
-app.use(express.static(path.join(root_directory, "client", "build")));
 
 
 app.post('/signup', signUpController);
@@ -35,10 +32,6 @@ app.get('/verfiy-token', verifyTokenController);
 app.get('/users', verifyUser, getUserController);
 app.get('/conversations', verifyUser, getConversationsController);
 
-app.get("*", (req, res) => {
-    console.log("sending file");
-    res.sendFile(path.resolve(root_directory, "client", "build", "index.html"));
-})
 
 // socket.io connection middleware
 io.use(async (socket, next) => {
