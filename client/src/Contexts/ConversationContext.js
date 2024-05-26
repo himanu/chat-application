@@ -139,7 +139,7 @@ export const ConversationContxtProvider = ({children}) => {
                 ...conversations[recipient_id],
                 unread_msg_count: 0,
                 pending_messages: {
-                    ...conversations[recipient_id].pending_messages,
+                    ...conversations[recipient_id]?.pending_messages ?? {},
                     [message_id]: {
                         sended_by_you: true,
                         text: message,
