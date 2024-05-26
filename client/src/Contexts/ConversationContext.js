@@ -129,7 +129,6 @@ export const ConversationContxtProvider = ({children}) => {
     };
 
     const sendMessage = async (message, recipient_id) => {
-        console.log("user ", user.id);
         const message_id = `${user.id}_${new Date().getTime()}`;
         console.log("message_id ", message_id);
         // add message into pending
@@ -252,7 +251,6 @@ export const ConversationContxtProvider = ({children}) => {
 
         socket.on("messageSeen", async (data) => {
             const { messageIds, user_id } = data;
-            console.log("message seen");
             setConversations((old) => {
                 let newState = { ...old };
                 messageIds.forEach((message_id) => {

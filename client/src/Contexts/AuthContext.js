@@ -96,7 +96,6 @@ export const AuthContextProvider = ({children}) => {
       }
       toggleLoader(false);
     }
-    console.log("user ", user);
     return (
         <AuthContext.Provider
             value={{
