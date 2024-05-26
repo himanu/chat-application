@@ -183,7 +183,7 @@ export const ConversationContxtProvider = ({children}) => {
             console.log("messageSaved ", data);
             setConversations((old) => {
                 let newState = { ...old };
-                newState[recipient_id] = newState[recipient_id] || {};
+                newState[recipient_id] = newState[recipient_id] || { messages: {} };
                 delete newState[recipient_id].pending_messages[pending_message_id];
                 newState[recipient_id].messages[id] = {
                     sended_by_you: true,
